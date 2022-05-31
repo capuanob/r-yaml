@@ -88,6 +88,7 @@ ifdef DEBUG
 endif
 
 test_code = "library(RUnit); library(yaml, lib.loc = 'build/lib'); source('build/yaml/tests/RUnit.R')"
+fuzz_code = "library(yaml, lib.loc = 'build/lib'); source('build/yaml/tests/fuzz.R')"
 
 all: test
 
@@ -102,6 +103,9 @@ valgrind-check: build/yaml
 
 test: build/lib/yaml
 	R --vanilla -e $(test_code)
+
+fuzz: build/lib/yaml
+	R --vanilla -e $(fuzz_code)
 
 gct-test: build/lib/yaml
 	R --vanilla -e "library(RUnit); library(yaml, lib.loc = 'build/lib'); options(yaml.verbose = TRUE); gctorture(TRUE); source('build/yaml/tests/RUnit.R'); gctorture(FALSE)"
@@ -152,4 +156,4 @@ build/yaml/%: %
 clean:
 	rm -fr yaml_*.tar.gz build
 
-.PHONY: all check gct-check test gct-test gdb-test clean valgrind-test check-changelog check-description tarball
+.PHONY: all check gct-check fuzz test gct-test gdb-test clean valgrind-test check-changelog check-description tarball
